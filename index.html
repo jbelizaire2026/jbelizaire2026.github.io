@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reclaim Construction</title>
+<meta name="description" content="Reclaim Construction — investor rehabs, home renovations, and aging-in-place modifications in St. Louis, Missouri." />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="kit.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="_ds_bundle.js"></script>
+<script src="icons.js"></script>
+<script type="text/babel" data-src="lib.js">
+/* Shared helpers for the Reclaim website UI kit. */
+(function () {
+const { useState } = React;
+
+/** Inline a brand icon from window.RC_ICONS, sized by font-size. */
+function Icon({ name, size = 24, className = "", style = {} }) {
+  const svg = (window.RC_ICONS || {})[name] || "";
+  return (
+    <span
+      className={"rc-ic " + className}
+      style={{ display: "inline-flex", fontSize: size, lineHeight: 0, ...style }}
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  );
+}
+
+/** Reclaim stacked lockup. `variant` = "dark" (white mark, for dark bg)
+ *  or "light" (grey mark, for light bg). */
+function Logo({ variant = "light", height = 56 }) {
+  const src =
+    variant === "dark"
+      ? "assets/logo/reclaim-logo-white.png"
+      : "assets/logo/reclaim-logo.png";
+  return <img src={src} alt="Reclaim Construction" style={{ height, display: "block" }} />;
+}
+
+window.Icon = Icon;
+window.Logo = Logo;
+})();
+
+</script>
+<script type="text/babel" data-src="Sections1.js">
+/* Navbar, Hero, "Why we're different" */
+(function () {
+const { Button, Card, Badge } = window.ReclaimConstructionDesignSystem_813411;
+const { Icon, Logo } = window;
+
+const NAV = [
+  { label: "Our process", id: "process" },
+  { label: "Investors", id: "investors" },
+  { label: "Homeowners", id: "homeowners" },
+  { label: "Aging in place", id: "aging-in-place" },
+];
+
+function goToSection(e, id) {
+  e.preventDefault();
+  const el = document.getElementById(id);
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.pageYOffset - 70;
+  window.scrollTo({ top: y, behavior: "smooth" });
+}
+
+function Navbar({ onContact }) {
+  return (
+    <header className="scheme-1" style={{ position: "sticky", top: 0, zIndex: 50 }}>
+      <div
+        className="container"
+        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", minHeight: 76, paddingInline: "var(--section-pad-x)" }}
+      >
+        <a href="#top" aria-label="Reclaim Construction home"><Logo variant="dark" height={62} /></a>
+        <nav style={{ display: "flex", gap: 4 }} className="rc-nav-links">
+          {NAV.map((l) => (
+            <a key={l.id} href={"#" + l.id} onClick={(e) => goToSection(e, l.id)} style={{ padding: "8px 16px", fontSize: "var(--text-small)" }}>{l.label}</a>
+          ))}
+        </nav>
+        <Button variant="alternate" size="sm" onClick={onContact}>Contact</Button>
+      </div>
+    </header>
+  );
+}
+
+function Hero({ onSchedule }) {
+  return (
+    <section className="section scheme-1" id="top">
+      <div className="container">
+        <div className="bgcard" style={{ minHeight: "40rem", alignItems: "center", justifyContent: "center" }}>
+          <div className="bg">
+            <img className="cover" src="assets/images/home-how-it-works-section-0.jpg" alt="Reclaim team at a job site" />
+            <div className="scrim"></div>
+          </div>
+          <div className="content center" style={{ padding: "4rem 2rem", maxWidth: "var(--container-lg)", marginInline: "auto" }}>
+            <h1 className="h1" style={{ color: "#fff" }}>Your home deserves better than shortcuts</h1>
+            <p className="lede" style={{ color: "rgba(255,255,255,.9)", marginTop: "1.5rem", maxWidth: "34rem", marginInline: "auto" }}>
+              We handle investor rehabs, home renovations, and aging-in-place modifications with the care
+              of a neighbor.
+            </p>
+            <div className="btn-row" style={{ justifyContent: "center", marginTop: "2rem" }}>
+              <Button variant="alternate" onClick={onSchedule}>Schedule a consultation</Button>
+              <Button variant="secondary-alt">View our work</Button>
+            </div>
+            <div className="rc-hero-trust">
+              {[
+                { icon: "shieldCheck", strong: "Licensed & insured", rest: "in Missouri" },
+                { icon: "users", strong: "Local crews", rest: "no rotating subs" },
+                { icon: "badgeCheck", strong: "Workmanship warranty", rest: "on every project" },
+              ].map((t) => (
+                <div key={t.strong} className="rc-hero-trust__item">
+                  <span className="rc-hero-trust__ic"><Icon name={t.icon} size={22} /></span>
+                  <span className="body"><strong>{t.strong}</strong> {t.rest}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TrustCard({ img, eyebrow, title, link, wide }) {
+  return (
+    <div className="bgcard" style={{ minHeight: wide ? "22rem" : "20rem", gridColumn: wide ? "1 / -1" : "auto", alignItems: "flex-end" }}>
+      <div className="bg">
+        <img className="cover" src={img} alt="" />
+        <div className="scrim"></div>
+      </div>
+      <div className="content" style={{ padding: wide ? "3rem" : "2rem" }}>
+        {eyebrow && <Badge variant="outline" style={{ color: "#fff", borderColor: "var(--color-white-20)", marginBottom: "1rem" }}>{eyebrow}</Badge>}
+        <h3 className={wide ? "h3" : "h5"} style={{ color: "#fff", maxWidth: wide ? "32rem" : "none" }}>{title}</h3>
+        <div style={{ marginTop: "1.5rem" }}>
+          <Button variant="link" iconRight={<Icon name="chevronRight" size={18} />} style={{ color: "#fff" }}>{link}</Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WhyDifferent() {
+  return (
+    <section className="section scheme-2">
+      <div className="container">
+        <div className="center mw-lg mx-auto mb-20">
+          <p className="eyebrow">Trust</p>
+          <h2 className="h2">Why we're different</h2>
+          <p className="lede muted mt-6">
+            We don't disappear after the contract is signed. You get straight answers, regular updates,
+            and a team that treats your home like their own.
+          </p>
+        </div>
+        <div className="grid cols-2">
+          <TrustCard wide img="assets/images/home-features-list-section-0.jpg" eyebrow="Communication"
+            title="Weekly updates. Clear timelines. No surprises. You always know what's happening and why." link="Budget transparency" />
+          <TrustCard img="assets/images/home-features-list-section-1.jpg"
+            title="Fixed costs. Detailed breakdowns. Change orders explained upfront." link="Quality craftsmanship" />
+          <TrustCard img="assets/images/home-how-it-works-section-4.jpg"
+            title="Quality materials and skilled trades. The details matter. They always have." link="Local expertise" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+window.Navbar = Navbar;
+window.Hero = Hero;
+window.WhyDifferent = WhyDifferent;
+})();
+
+</script>
+<script type="text/babel" data-src="Sections2.js">
+/* Investors, Homeowners, Aging-in-place — service sections with tabs */
+(function () {
+const { Button: SButton, Card: SCard, Tabs: STabs } = window.ReclaimConstructionDesignSystem_813411;
+const { Icon: SIcon } = window;
+const { useState: useS2 } = React;
+
+function ServiceIntro({ eyebrow, title, body }) {
+  return (
+    <div className="center mw-lg mx-auto mb-20">
+      <p className="eyebrow">{eyebrow}</p>
+      <h2 className="h2">{title}</h2>
+      <p className="lede muted mt-6">{body}</p>
+    </div>
+  );
+}
+
+/* Draggable before/after reveal slider. AFTER is the base; BEFORE is clipped from the left. */
+function BeforeAfter({ before, after, alt }) {
+  const [pos, setPos] = useS2(50);
+  const wrap = React.useRef(null);
+  const drag = React.useRef(false);
+
+  const moveTo = (clientX) => {
+    const el = wrap.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const p = ((clientX - r.left) / r.width) * 100;
+    setPos(Math.max(0, Math.min(100, p)));
+  };
+  const onDown = (e) => { drag.current = true; e.currentTarget.setPointerCapture(e.pointerId); moveTo(e.clientX); };
+  const onMove = (e) => { if (drag.current) moveTo(e.clientX); };
+  const onUp = () => { drag.current = false; };
+  const onKey = (e) => {
+    if (e.key === "ArrowLeft") { e.preventDefault(); setPos((p) => Math.max(0, p - 4)); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); setPos((p) => Math.min(100, p + 4)); }
+  };
+
+  return (
+    <div
+      ref={wrap}
+      onPointerDown={onDown}
+      onPointerMove={onMove}
+      onPointerUp={onUp}
+      onPointerCancel={onUp}
+      style={{ position: "relative", touchAction: "none", userSelect: "none", cursor: "ew-resize" }}
+    >
+      <img className="cover aspect-square" src={after} alt={alt} draggable={false} style={{ display: "block" }} />
+      <div style={{ position: "absolute", inset: 0, clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
+        <img className="cover" src={before} alt="" draggable={false} style={{ position: "absolute", inset: 0 }} />
+      </div>
+      <div style={{ position: "absolute", top: 0, bottom: 0, left: `${pos}%`, transform: "translateX(-50%)", width: 2, background: "rgba(255,255,255,.92)", boxShadow: "0 0 0 1px rgba(0,0,0,.18)", pointerEvents: "none" }}></div>
+      <button
+        type="button"
+        aria-label="Drag to compare before and after"
+        onKeyDown={onKey}
+        style={{
+          position: "absolute", top: "50%", left: `${pos}%`, transform: "translate(-50%,-50%)",
+          width: 46, height: 46, borderRadius: "50%", border: "2px solid rgba(255,255,255,.95)",
+          background: "rgba(17,17,17,.5)", color: "#fff", padding: 0,
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 3,
+          cursor: "ew-resize", boxShadow: "0 2px 12px rgba(0,0,0,.4)", touchAction: "none",
+        }}
+      >
+        <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1, fontWeight: 700 }}>‹</span>
+        <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1, fontWeight: 700 }}>›</span>
+      </button>
+    </div>
+  );
+}
+
+/* Vertical tab list with a swapping image — used by Investors & Aging-in-place. */
+function SideTabs({ tabs }) {
+  const [active, setActive] = useS2(0);
+  return (
+    <div className="grid cols-2 items-center gap-20">
+      <div>
+        {tabs.map((t, i) => (
+          <button
+            key={i}
+            onClick={() => setActive(i)}
+            style={{
+              display: "block", width: "100%", textAlign: "left", cursor: "pointer",
+              background: "transparent", border: "none",
+              borderBottom: "1px solid var(--scheme-border)", padding: "1.5rem 0",
+              opacity: active === i ? 1 : 0.4, transition: "opacity .2s ease",
+            }}
+          >
+            <h4 className="h4">{t.title}</h4>
+            {active === i && <p className="body muted" style={{ marginTop: ".75rem" }}>{t.body}</p>}
+          </button>
+        ))}
+      </div>
+      <div className="rounded-img" key={active} style={{ animation: "rc-tab-fade .4s ease" }}>
+        {tabs[active].before
+          ? <BeforeAfter before={tabs[active].before} after={tabs[active].after} alt={tabs[active].title} />
+          : <img className="cover aspect-square" src={tabs[active].img} alt={tabs[active].title} />}
+      </div>
+    </div>
+  );
+}
+
+function Investors() {
+  const tabs = [
+    { title: "BRRRR projects", body: "We manage the full rehab from acquisition to rental. Scope, budget, timeline, and draw coordination handled by someone who understands your exit strategy.", before: "assets/images/investor-brrrr-before.jpg", after: "assets/images/investor-brrrr-after.jpg" },
+    { title: "Fix-and-flips", body: "Speed and quality matter equally. We deliver market-ready homes on schedule without cutting corners that hurt your sale price.", before: "assets/images/investor-flip-before.jpg", after: "assets/images/investor-flip-after.jpg" },
+    { title: "Rental rehabs", body: "Durable, tenant-friendly finishes that hold up and keep maintenance costs down. That's how we build rental income.", before: "assets/images/investor-rental-before.jpg", after: "assets/images/investor-rental-after.jpg" },
+  ];
+  return (
+    <section className="section scheme-2" id="investors">
+      <div className="container">
+        <ServiceIntro eyebrow="Investors" title="Rental rehabs that maximize returns"
+          body="BRRRR projects, fix-and-flips, and rental rehabs need precision. We handle scope development, draw coordination, and timeline management so you can focus on the numbers." />
+        <SideTabs tabs={tabs} />
+      </div>
+    </section>
+  );
+}
+
+function Homeowners() {
+  const items = [
+    { value: "k", label: "Kitchens", content: <HomeownerCard eyebrow="Kitchen" title="Where life happens" body="A well-designed kitchen brings the family together. We build kitchens that function beautifully and last for decades." img="assets/images/home-kitchen.jpg" /> },
+    { value: "b", label: "Bathrooms", content: <HomeownerCard eyebrow="Bathroom" title="A daily retreat" body="Better storage, better light, and finishes that hold up to real life. Bathrooms you actually enjoy using." img="assets/images/home-bathroom.jpg" /> },
+    { value: "s", label: "Basements", content: <HomeownerCard eyebrow="Basement" title="Room to grow" body="Turn unused square footage into a real part of your home — dry, warm, and finished right." img="assets/images/home-basement.jpg" /> },
+  ];
+  return (
+    <section className="section scheme-3" id="homeowners">
+      <div className="container">
+        <ServiceIntro eyebrow="Homeowners" title="Spaces that transform how you live"
+          body="A kitchen that works. A bathroom that feels like a retreat. A basement that becomes part of your home. We build spaces that improve your daily life." />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ width: "100%" }}>
+            <STabs variant="pill" items={items} />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HomeownerCard({ eyebrow, title, body, img }) {
+  return (
+    <SCard>
+      <div className="grid cols-2 items-center" style={{ gap: 0 }}>
+        <div style={{ padding: "3rem" }}>
+          <p className="eyebrow">{eyebrow}</p>
+          <h3 className="h3 mb-12" style={{ marginBottom: "1rem" }}>{title}</h3>
+          <p className="body muted">{body}</p>
+          <div className="btn-row mt-8">
+            <SButton variant="secondary">Schedule</SButton>
+            <SButton variant="link" iconRight={<SIcon name="chevronRight" size={18} />}>View work</SButton>
+          </div>
+        </div>
+        <div className="aspect-square"><img className="cover" src={img} alt={title} /></div>
+      </div>
+    </SCard>
+  );
+}
+
+function AgingInPlace() {
+  const tabs = [
+    { title: "Walk-in showers", body: "Curbless, slip-resistant showers designed for safe, independent bathing for years to come.", img: "assets/images/aging-walk-in-shower.jpg" },
+    { title: "Grab bars & safety", body: "Discreet, sturdy support placed exactly where it's needed — bathrooms, hallways, and entries.", img: "assets/images/aging-grab-bars.jpg" },
+    { title: "Ramps & doorways", body: "Wider doorways and gentle ramps that keep every room reachable, with dignity.", img: "assets/images/aging-ramp.webp" },
+  ];
+  return (
+    <section className="section scheme-2" id="aging-in-place">
+      <div className="container">
+        <ServiceIntro eyebrow="Aging in place" title="Modifications that preserve independence"
+          body="Walk-in showers, grab bars, ramps, and wider doorways — thoughtful changes that let people stay safely in the home they love." />
+        <SideTabs tabs={tabs} />
+      </div>
+    </section>
+  );
+}
+
+window.Investors = Investors;
+window.Homeowners = Homeowners;
+window.AgingInPlace = AgingInPlace;
+})();
+
+</script>
+<script type="text/babel" data-src="Sections3.js">
+/* Testimonials, Gallery, Process */
+(function () {
+const { Card: S3Card, Badge: S3Badge, Button: S3Button, StarRating: S3Stars, Avatar: S3Avatar } = window.ReclaimConstructionDesignSystem_813411;
+const { Icon: S3Icon } = window;
+const { useState: useS3 } = React;
+
+const REVIEWS = [
+  { quote: "They finished two weeks early and came in under budget. That never happens.", name: "David Chen", role: "Real estate investor", img: "assets/images/home-testimonial-section-0.jpg" },
+  { quote: "Our kitchen is beautiful. More importantly, it works exactly how we imagined.", name: "Sarah Mitchell", role: "Homeowner, Clayton", img: "assets/images/home-testimonial-section-1.jpg" },
+  { quote: "My mom can move through the house safely now. That's everything to us.", name: "Robert Walsh", role: "Family, aging in place", img: "assets/images/home-testimonial-section-2.jpg" },
+  { quote: "Every question got a same-day answer. No chasing, no runaround — just a team that does what they say.", name: "Angela Foster", role: "Homeowner, Webster Groves" },
+  { quote: "Three flips with Reclaim now. Predictable budgets, clean work, and they never blow the timeline.", name: "Marcus Reed", role: "Buy-and-hold investor" },
+  { quote: "Curbless shower, grab bars, wider doorways. Dad feels safe and it still looks like home.", name: "Tom & Linda Pearce", role: "Aging in place" },
+];
+
+function ReviewCard({ r }) {
+  return (
+    <figure className="rc-tcard">
+      <S3Stars value={5} size={18} />
+      <blockquote className="lede rc-tcard__q">“{r.quote}”</blockquote>
+      <figcaption className="rc-tcard__by">
+        <S3Avatar src={r.img} name={r.name} size="md" />
+        <div>
+          <p className="body" style={{ fontWeight: 600 }}>{r.name}</p>
+          <p className="body muted">{r.role}</p>
+        </div>
+      </figcaption>
+    </figure>
+  );
+}
+
+function Testimonials() {
+  const loop = [...REVIEWS, ...REVIEWS];
+  return (
+    <section className="section scheme-4" id="reviews">
+      <div className="container">
+        <div className="center mw-lg mx-auto mb-16">
+          <p className="eyebrow" style={{ color: "var(--color-mantis, #7ac143)" }}>Reviews</p>
+          <h2 className="h2" style={{ color: "#fff" }}>Real feedback</h2>
+          <p className="lede mt-6" style={{ color: "rgba(255,255,255,.8)" }}>From investors, homeowners, and families who trusted us with their projects.</p>
+        </div>
+      </div>
+      <div className="rc-marquee">
+        <div className="rc-marquee__track">
+          {loop.map((r, i) => <ReviewCard key={i} r={r} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function VideoCard({ img, title, meta, duration }) {
+  const [mode, setMode] = useS3("after");
+  return (
+    <div className="rounded-img rc-video" style={{ position: "relative", overflow: "hidden", cursor: "pointer" }}>
+      <img
+        className="cover"
+        style={{
+          width: "100%", aspectRatio: "16 / 11", display: "block",
+          filter: mode === "before" ? "grayscale(.55) brightness(.78) contrast(.97)" : "none",
+          transition: "filter .45s ease",
+        }}
+        src={img}
+        alt={title}
+      />
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,.18) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.62) 100%)", pointerEvents: "none" }}></div>
+
+      <div style={{ position: "absolute", top: "1rem", left: "1rem", display: "flex", gap: "2px", padding: "3px", borderRadius: "999px", background: "rgba(17,28,41,.5)", backdropFilter: "blur(6px)" }}>
+        {["before", "after"].map((m) => (
+          <button
+            key={m}
+            onClick={(e) => { e.stopPropagation(); setMode(m); }}
+            style={{
+              border: "none", cursor: "pointer", padding: ".35rem .85rem", borderRadius: "999px",
+              fontFamily: "inherit", fontSize: ".68rem", fontWeight: 600, letterSpacing: ".05em", textTransform: "uppercase",
+              color: mode === m ? "var(--color-jelly-bean-darkest, #112c41)" : "#fff",
+              background: mode === m ? "#fff" : "transparent", transition: "all .2s ease",
+            }}
+          >{m}</button>
+        ))}
+      </div>
+
+      <span style={{ position: "absolute", top: "1rem", right: "1rem", background: "rgba(17,28,41,.5)", backdropFilter: "blur(6px)", color: "#fff", fontSize: ".72rem", fontWeight: 600, padding: ".3rem .6rem", borderRadius: "6px" }}>{duration}</span>
+
+      <div className="rc-play" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "4.25rem", height: "4.25rem", borderRadius: "999px", background: "rgba(255,255,255,.94)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 10px 34px rgba(0,0,0,.4)", transition: "transform .2s ease" }}>
+        <span style={{ color: "var(--color-jelly-bean-darkest, #112c41)", fontSize: "1.55rem", marginLeft: "4px", display: "flex" }}><S3Icon name="play" /></span>
+      </div>
+
+      <div style={{ position: "absolute", left: "1.25rem", right: "1.25rem", bottom: "1.1rem", pointerEvents: "none" }}>
+        <h4 className="h5" style={{ color: "#fff", marginBottom: ".15rem" }}>{title}</h4>
+        <p className="body" style={{ color: "rgba(255,255,255,.82)", fontSize: ".85rem" }}>{meta}</p>
+      </div>
+    </div>
+  );
+}
+
+function Gallery() {
+  const projects = [
+    { img: "assets/images/home-gallery-section-0.jpg", title: "Tower Grove bungalow", meta: "Full gut rehab · BRRRR", duration: "1:24" },
+    { img: "assets/images/home-gallery-section-1.jpg", title: "Soulard two-flat", meta: "Rental conversion", duration: "2:05" },
+    { img: "assets/images/home-gallery-section-2.jpg", title: "Maplewood kitchen", meta: "Kitchen remodel", duration: "0:58" },
+    { img: "assets/images/home-gallery-section-3.jpg", title: "Webster Groves bath", meta: "Bathroom remodel", duration: "1:47" },
+    { img: "assets/images/home-feature-section-8.jpg", title: "Benton Park flip", meta: "Fix-and-flip", duration: "1:12" },
+    { img: "assets/images/home-feature-section-6.jpg", title: "Kirkwood basement", meta: "Basement finish", duration: "2:31" },
+  ];
+  return (
+    <section className="section scheme-2" id="projects">
+      <div className="container">
+        <div className="center mw-lg mx-auto mb-20">
+          <h2 className="h2">Featured projects</h2>
+          <p className="lede muted mt-6">Before-and-after videos from real St. Louis projects. Tap play to watch the transformation.</p>
+        </div>
+        <div className="rc-gallery" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem" }}>
+          {projects.map((p, i) => <VideoCard key={i} {...p} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ProcessCard({ step, title, body, img, big }) {
+  return (
+    <div className="bgcard" style={{ minHeight: big ? "100%" : "16rem", alignItems: big ? "center" : "flex-start" }}>
+      <div className="bg"><img className="cover" src={img} alt="" /><div className="scrim"></div></div>
+      <div className="content" style={{ padding: big ? "3rem" : "2rem" }}>
+        {step && <S3Badge variant="outline" style={{ color: "#fff", borderColor: "var(--color-white-20)", marginBottom: "1rem" }}>{step}</S3Badge>}
+        <h3 className={big ? "h3" : "h5"} style={{ color: "#fff", marginBottom: ".75rem", fontSize: big ? undefined : "1.5rem", lineHeight: big ? undefined : 1.15, overflowWrap: "break-word", hyphens: "auto" }}>{title}</h3>
+        <p className="body" style={{ color: "rgba(255,255,255,.85)" }}>{body}</p>
+      </div>
+    </div>
+  );
+}
+
+function Process() {
+  return (
+    <section className="section scheme-2" id="process">
+      <div className="container">
+        <div className="center mw-lg mx-auto mb-20">
+          <p className="eyebrow">How we work</p>
+          <h2 className="h2">Why we're different</h2>
+          <p className="lede muted mt-6">
+            We don't disappear after the contract is signed. Five straightforward steps, weekly updates,
+            and straight answers from first conversation to final walkthrough. No mystery. No guessing.
+          </p>
+        </div>
+        <div className="grid cols-2">
+          <ProcessCard big step="Step 01" title="Discovery call"
+            body="We listen. You tell us about the project, your timeline, your budget, and what matters most. We ask good questions."
+            img="assets/images/home-how-it-works-section-1.jpg" />
+          <div className="grid cols-2">
+            <ProcessCard step="Step 02" title="Site visit" body="We walk the property. We measure. We map what's there." img="assets/images/home-how-it-works-section-2.jpg" />
+            <ProcessCard step="Step 03" title="Scope & budget" body="Detailed proposal. Fixed price. You approve up front." img="assets/images/home-how-it-works-section-3.jpg" />
+            <ProcessCard step="Step 04" title="Construction" body="We build it. Weekly updates. Same-day answers given." img="assets/images/home-how-it-works-section-4.jpg" />
+            <ProcessCard step="Step 05" title="Walkthrough" body="We inspect together. You sign off. The work's done." img="assets/images/home-how-it-works-section-0.jpg" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+window.Testimonials = Testimonials;
+window.Gallery = Gallery;
+window.Process = Process;
+})();
+
+</script>
+<script type="text/babel" data-src="Sections4.js">
+/* About, Service Area, Final CTA */
+(function () {
+const { Button: S4Button } = window.ReclaimConstructionDesignSystem_813411;
+const { Icon: S4Icon } = window;
+const { useState: useS4 } = React;
+
+function About({ onContact }) {
+  return (
+    <section className="section scheme-2" id="about">
+      <div className="container">
+        <div className="grid cols-2 items-center gap-20">
+          <div>
+            <p className="eyebrow">Founders</p>
+            <h2 className="h2">Jeff and Maria built this the right way</h2>
+            <p className="lede muted" style={{ margin: "1.5rem 0" }}>
+              We started Reclaim because we got tired of watching contractors disappear mid-project and
+              homeowners left holding the bill. St. Louis is home. We treat every job like it's our own.
+            </p>
+            <div className="stack-sm" style={{ marginTop: "1.5rem" }}>
+              <p className="body"><strong>Licensed &amp; insured</strong> in the State of Missouri</p>
+              <p className="body"><strong>Local crews</strong> — no rotating subcontractors</p>
+              <p className="body"><strong>Workmanship warranty</strong> on every project</p>
+            </div>
+            <div className="btn-row mt-8">
+              <S4Button onClick={onContact}>Get a free estimate</S4Button>
+            </div>
+          </div>
+          <div className="rounded-img"><img className="cover" src="assets/images/home-about-section.jpg" alt="Jeff and Maria, founders of Reclaim Construction" /></div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ServiceArea() {
+  const areas = [
+    { name: "St. Louis", desc: "St. Louis City and St. Louis County, Missouri", img: "assets/images/home-locations-section-0.jpg" },
+    { name: "Clayton", desc: "Clayton, Missouri and the surrounding suburbs", img: "assets/images/home-locations-section-1.jpg" },
+    { name: "Webster Groves", desc: "Webster Groves and surrounding communities", img: "assets/images/home-locations-section-2.jpg" },
+  ];
+  const [active, setActive] = useS4(0);
+  return (
+    <section className="section scheme-2">
+      <div className="container">
+        <div className="mw-lg mb-20">
+          <p className="eyebrow">Service</p>
+          <h2 className="h2">Where we work</h2>
+          <p className="lede muted mt-6">We serve St. Louis City, St. Louis County, and surrounding communities throughout the region.</p>
+        </div>
+        <div className="grid" style={{ gridTemplateColumns: ".6fr 1fr", gap: "5rem", alignItems: "center" }}>
+          <div>
+            {areas.map((a, i) => (
+              <button key={a.name} onClick={() => setActive(i)}
+                style={{ display: "block", width: "100%", textAlign: "left", cursor: "pointer", background: "transparent",
+                  border: "none", borderLeft: "2px solid " + (active === i ? "var(--scheme-text)" : "var(--scheme-border)"),
+                  padding: "1.25rem 0 1.25rem 2rem", opacity: active === i ? 1 : 0.55, transition: "all .2s ease" }}>
+                <h5 className="h5" style={{ marginBottom: ".5rem" }}>{a.name}</h5>
+                <p className="body muted">{a.desc}</p>
+              </button>
+            ))}
+          </div>
+          <div className="rounded-img" key={active} style={{ animation: "rc-tab-fade .4s ease" }}>
+            <img className="cover aspect-32" src={areas[active].img} alt={areas[active].name} />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FinalCta({ onSchedule, onContact }) {
+  return (
+    <section className="section scheme-3">
+      <div className="container">
+        <div className="center mw-lg mx-auto mb-20">
+          <h2 className="h2">Let's talk about your project</h2>
+          <p className="lede muted mt-6">
+            A consultation costs nothing. Clarity is worth everything. We'll listen, ask the right
+            questions, and tell you exactly what we can do.
+          </p>
+          <div className="btn-row" style={{ justifyContent: "center", marginTop: "2rem" }}>
+            <S4Button onClick={onSchedule}>Schedule a consultation</S4Button>
+            <S4Button variant="secondary" onClick={onContact}>Contact us</S4Button>
+          </div>
+        </div>
+        <div className="rounded-img"><img className="cover" style={{ maxHeight: "32rem" }} src="assets/images/home-cta-section.jpg" alt="A finished Reclaim project" /></div>
+      </div>
+    </section>
+  );
+}
+
+window.About = About;
+window.ServiceArea = ServiceArea;
+window.FinalCta = FinalCta;
+})();
+
+</script>
+<script type="text/babel" data-src="Sections5.js">
+/* Contact form & Footer */
+(function () {
+const RC = window.ReclaimConstructionDesignSystem_813411;
+const { Button: S5Button, Input: S5Input, Textarea: S5Textarea, Select: S5Select, Checkbox: S5Checkbox, Radio: S5Radio, Label: S5Label } = RC;
+const { Icon: S5Icon, Logo: S5Logo } = window;
+const { useState: useS5, forwardRef: fwdRef } = React;
+
+const ContactForm = fwdRef(function ContactForm(_props, ref) {
+  const [sent, setSent] = useS5(false);
+  const formRef = React.useRef(null);
+  const toForm = () => {
+    const el = formRef.current;
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 90;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+  return (
+    <section className="section scheme-3" ref={ref} id="contact">
+      <div className="container">
+        <div className="center mw-lg mx-auto mb-16">
+          <h2 className="h2">Let's talk about your project</h2>
+          <p className="lede muted mt-6">
+            A consultation costs nothing. Clarity is worth everything. We'll listen, ask the right
+            questions, and tell you exactly what we can do.
+          </p>
+          <div className="btn-row" style={{ justifyContent: "center", marginTop: "2rem" }}>
+            <S5Button onClick={toForm}>Schedule a consultation</S5Button>
+            <S5Button variant="secondary" onClick={toForm}>Contact us</S5Button>
+          </div>
+        </div>
+        <div className="rounded-img" style={{ marginBottom: "3rem" }}>
+          <img className="cover" style={{ maxHeight: "32rem" }} src="assets/images/home-cta-section.jpg" alt="A Reclaim consultation" />
+        </div>
+        {sent ? (
+          <div ref={formRef} className="scheme-2 rc-contact-panel" style={{ textAlign: "center" }}>
+            <RC.Badge variant="green" style={{ marginBottom: "1rem" }}>Message sent</RC.Badge>
+            <h3 className="h4" style={{ marginBottom: ".75rem" }}>Thanks — we'll be in touch today.</h3>
+            <p className="body muted" style={{ maxWidth: "32rem", marginInline: "auto" }}>A real person from the Reclaim team reviews every request. Expect a call or email within a few hours.</p>
+            <div className="mt-8"><S5Button variant="secondary" onClick={() => setSent(false)}>Send another</S5Button></div>
+          </div>
+        ) : (
+          <form ref={formRef} className="scheme-2 rc-contact-panel" onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
+            <div className="rc-field-grid rc-field-grid--4">
+              <div><S5Label htmlFor="fn">First name</S5Label><S5Input id="fn" required /></div>
+              <div><S5Label htmlFor="ln">Last name</S5Label><S5Input id="ln" required /></div>
+              <div><S5Label htmlFor="em">Email</S5Label><S5Input id="em" type="email" required /></div>
+              <div><S5Label htmlFor="ph">Phone</S5Label><S5Input id="ph" type="tel" placeholder="(314) 555-0123" required /></div>
+            </div>
+            <div style={{ marginBottom: "1.5rem" }}>
+              <S5Label htmlFor="addr">Property address</S5Label>
+              <S5Input id="addr" placeholder="Street, city, ZIP" />
+            </div>
+            <div className="rc-field-grid rc-field-grid--4">
+              <div><S5Label>Project type</S5Label><S5Select placeholder="Select one" options={["Investor rehab", "Kitchen remodel", "Bathroom", "Basement finish", "Whole-home renovation", "Aging in place", "Other"]} /></div>
+              <div><S5Label>Budget range</S5Label><S5Select placeholder="Select one" options={["Under $25k", "$25k–$50k", "$50k–$100k", "$100k–$250k", "$250k+", "Not sure yet"]} /></div>
+              <div><S5Label>Timeline</S5Label><S5Select placeholder="Select one" options={["As soon as possible", "1–3 months", "3–6 months", "6+ months", "Just exploring"]} /></div>
+              <div><S5Label>Preferred contact</S5Label><S5Select placeholder="Select one" options={["Phone call", "Email", "Text message"]} /></div>
+            </div>
+            <div style={{ marginBottom: "1.5rem" }}>
+              <S5Label>Which describes you?</S5Label>
+              <div className="rc-role-row">
+                <S5Radio name="role" defaultChecked label="Real estate investor" />
+                <S5Radio name="role" label="Homeowner" />
+                <S5Radio name="role" label="Aging in place" />
+                <S5Radio name="role" label="Family member" />
+              </div>
+            </div>
+            <div style={{ marginBottom: "1.5rem" }}>
+              <S5Label htmlFor="msg">Tell us about it</S5Label>
+              <S5Textarea id="msg" placeholder="Describe your project and timeline" style={{ minHeight: "8rem" }} />
+            </div>
+            <div className="rc-contact-submit">
+              <S5Checkbox id="terms" defaultChecked label="I agree to the terms" />
+              <S5Button type="submit">Submit request</S5Button>
+            </div>
+          </form>
+        )}
+      </div>
+    </section>
+  );
+});
+
+const FOOT = {
+  Services: [
+    { label: "Investors", id: "investors" },
+    { label: "Homeowners", id: "homeowners" },
+    { label: "Aging in place", id: "aging-in-place" },
+    { label: "Our process", id: "process" },
+  ],
+  Company: [
+    { label: "Featured projects", id: "projects" },
+    { label: "Reviews", id: "reviews" },
+    { label: "Contact", id: "contact" },
+  ],
+};
+
+function footScroll(e, id) {
+  e.preventDefault();
+  const el = document.getElementById(id);
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.pageYOffset - 70;
+  window.scrollTo({ top: y, behavior: "smooth" });
+}
+
+function Footer() {
+  return (
+    <footer className="section scheme-2" style={{ paddingBlock: "5rem" }}>
+      <div className="container">
+        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "2rem", paddingBottom: "4rem" }} className="rc-foot-cols">
+          <div>
+            <a href="#top" onClick={(e) => footScroll(e, "top")}><S5Logo variant="light" height={75} /></a>
+            <p className="body muted" style={{ marginTop: "1.25rem", maxWidth: "22rem" }}>Investor rehabs, home renovations, and aging-in-place modifications. St. Louis built.</p>
+          </div>
+          {Object.entries(FOOT).map(([head, links]) => (
+            <div key={head}>
+              <p className="body" style={{ fontWeight: 600, marginBottom: "1rem" }}>{head}</p>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: ".5rem" }}>
+                {links.map((l) => <li key={l.id}><a href={"#" + l.id} onClick={(e) => footScroll(e, l.id)} className="body muted">{l.label}</a></li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "space-between", alignItems: "center", paddingTop: "2rem", borderTop: "1px solid var(--scheme-border)" }}>
+          <p className="body muted">© 2026 Reclaim Construction. All rights reserved.</p>
+          <p className="body muted">St. Louis, Missouri</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+window.ContactForm = ContactForm;
+window.Footer = Footer;
+})();
+
+</script>
+<style>
+  .rc-nav-links a:hover { opacity: .7; }
+  .rc-foot-cols a:hover { color: var(--color-jelly-bean); }
+  .rc-video:hover .rc-play { transform: translate(-50%, -50%) scale(1.09); }
+  @media (max-width: 991px){ .rc-nav-links{ display:none !important; } .rc-foot-cols{ grid-template-columns:1fr 1fr !important; } .rc-gallery{ grid-template-columns:1fr 1fr !important; } }
+  @media (max-width: 620px){ .rc-gallery{ grid-template-columns:1fr !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  const { Navbar, Hero, WhyDifferent, Investors, Homeowners, AgingInPlace,
+          Testimonials, Gallery, Process, About, ServiceArea, FinalCta,
+          ContactForm, Footer } = window;
+
+  function scrollToContact() {
+    const el = document.getElementById("contact");
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 70;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }
+
+  function App() {
+    return (
+      <div data-screen-label="Homepage">
+        <Navbar onContact={scrollToContact} />
+        <Hero onSchedule={scrollToContact} />
+        <Process />
+        <Investors />
+        <Homeowners />
+        <AgingInPlace />
+        <Testimonials />
+        <Gallery />
+        <ContactForm />
+        <Footer />
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
