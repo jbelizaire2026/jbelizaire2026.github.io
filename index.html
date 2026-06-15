@@ -3,11 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Reclaim Construction</title>
 <meta name="description" content="Reclaim Construction — investor rehabs, home renovations, and aging-in-place modifications in St. Louis, Missouri." />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Reclaim Construction</title>
 <link rel="stylesheet" href="styles.css" />
 <link rel="stylesheet" href="kit.css" />
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
@@ -37,8 +34,8 @@ function Icon({ name, size = 24, className = "", style = {} }) {
 function Logo({ variant = "light", height = 56 }) {
   const src =
     variant === "dark"
-      ? "reclaim-logo-white.png"
-      : "reclaim-logo.png";
+      ? "assets/logo/reclaim-logo-white.png"
+      : "assets/logo/reclaim-logo.png";
   return <img src={src} alt="Reclaim Construction" style={{ height, display: "block" }} />;
 }
 
@@ -89,22 +86,22 @@ function Navbar({ onContact }) {
 
 function Hero({ onSchedule }) {
   return (
-    <section className="section scheme-1" id="top">
+    <section className="section scheme-1" id="top" style={{ paddingTop: "calc(var(--section-pad-y) / 2)" }}>
       <div className="container">
         <div className="bgcard" style={{ minHeight: "40rem", alignItems: "center", justifyContent: "center" }}>
           <div className="bg">
-            <img className="cover" src="home-how-it-works-section-0.jpg" alt="Reclaim team at a job site" />
+            <img className="cover" src="assets/images/hero-family-home.jpg" alt="A mother and daughter outside their St. Louis home" />
             <div className="scrim"></div>
           </div>
           <div className="content center" style={{ padding: "4rem 2rem", maxWidth: "var(--container-lg)", marginInline: "auto" }}>
-            <h1 className="h1" style={{ color: "#fff" }}>Your home deserves better than shortcuts</h1>
+            <h1 className="h1" style={{ color: "#fff" }}>Your home deserves more than shortcuts</h1>
             <p className="lede" style={{ color: "rgba(255,255,255,.9)", marginTop: "1.5rem", maxWidth: "34rem", marginInline: "auto" }}>
               We handle investor rehabs, home renovations, and aging-in-place modifications with the care
               of a neighbor.
             </p>
             <div className="btn-row" style={{ justifyContent: "center", marginTop: "2rem" }}>
               <Button variant="alternate" onClick={onSchedule}>Schedule a consultation</Button>
-              <Button variant="secondary-alt">View our work</Button>
+              <Button variant="secondary-alt" onClick={() => { const el = document.getElementById("projects"); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 70, behavior: "smooth" }); }}>View our work</Button>
             </div>
             <div className="rc-hero-trust">
               {[
@@ -156,11 +153,11 @@ function WhyDifferent() {
           </p>
         </div>
         <div className="grid cols-2">
-          <TrustCard wide img="home-features-list-section-0.jpg" eyebrow="Communication"
+          <TrustCard wide img="assets/images/home-features-list-section-0.jpg" eyebrow="Communication"
             title="Weekly updates. Clear timelines. No surprises. You always know what's happening and why." link="Budget transparency" />
-          <TrustCard img="home-features-list-section-1.jpg"
+          <TrustCard img="assets/images/home-features-list-section-1.jpg"
             title="Fixed costs. Detailed breakdowns. Change orders explained upfront." link="Quality craftsmanship" />
-          <TrustCard img="home-how-it-works-section-4.jpg"
+          <TrustCard img="assets/images/home-how-it-works-section-4.jpg"
             title="Quality materials and skilled trades. The details matter. They always have." link="Local expertise" />
         </div>
       </div>
@@ -278,9 +275,9 @@ function SideTabs({ tabs }) {
 
 function Investors() {
   const tabs = [
-    { title: "BRRRR projects", body: "We manage the full rehab from acquisition to rental. Scope, budget, timeline, and draw coordination handled by someone who understands your exit strategy.", before: "investor-brrrr-before.jpg", after: "investor-brrrr-after.jpg" },
-    { title: "Fix-and-flips", body: "Speed and quality matter equally. We deliver market-ready homes on schedule without cutting corners that hurt your sale price.", before: "investor-flip-before.jpg", after: "investor-flip-after.jpg" },
-    { title: "Rental rehabs", body: "Durable, tenant-friendly finishes that hold up and keep maintenance costs down. That's how we build rental income.", before: "investor-rental-before.jpg", after: "investor-rental-after.jpg" },
+    { title: "BRRRR projects", body: "We manage the full rehab from acquisition to rental. Scope, budget, timeline, and draw coordination handled by someone who understands your exit strategy.", before: "assets/images/brrrr-before-v2.jpg", after: "assets/images/brrrr-after-v2.jpg" },
+    { title: "Fix-and-flips", body: "Speed and quality matter equally. We deliver market-ready homes on schedule without cutting corners that hurt your sale price.", before: "assets/images/flip-hillside-before.jpg", after: "assets/images/flip-hillside-after.jpg" },
+    { title: "Rental rehabs", body: "Durable, tenant-friendly finishes that hold up and keep maintenance costs down. That's how we build rental income.", before: "assets/images/rental-rehab-before-v2.jpg", after: "assets/images/rental-rehab-after-v2.jpg" },
   ];
   return (
     <section className="section scheme-2" id="investors">
@@ -295,9 +292,11 @@ function Investors() {
 
 function Homeowners() {
   const items = [
-    { value: "k", label: "Kitchens", content: <HomeownerCard eyebrow="Kitchen" title="Where life happens" body="A well-designed kitchen brings the family together. We build kitchens that function beautifully and last for decades." img="home-kitchen.jpg" /> },
-    { value: "b", label: "Bathrooms", content: <HomeownerCard eyebrow="Bathroom" title="A daily retreat" body="Better storage, better light, and finishes that hold up to real life. Bathrooms you actually enjoy using." img="home-bathroom.jpg" /> },
-    { value: "s", label: "Basements", content: <HomeownerCard eyebrow="Basement" title="Room to grow" body="Turn unused square footage into a real part of your home — dry, warm, and finished right." img="home-basement.jpg" /> },
+    { value: "k", label: "Kitchens", content: <HomeownerCard eyebrow="Kitchen" title="Where life happens" body="A well-designed kitchen brings the family together. We build kitchens that function beautifully and last for decades." before="assets/images/kitchen-before.jpg" after="assets/images/kitchen-after.jpg" /> },
+    { value: "b", label: "Bathrooms", content: <HomeownerCard eyebrow="Bathroom" title="A daily retreat" body="Better storage, better light, and finishes that hold up to real life. Bathrooms you actually enjoy using." composed="assets/images/bathroom-before-after.jpg" /> },
+    { value: "s", label: "Basements", content: <HomeownerCard eyebrow="Basement" title="Room to grow" body="Turn unused square footage into a real part of your home — dry, warm, and finished right." img="assets/images/home-basement.jpg" /> },
+    { value: "d", label: "Porches & decks", content: <HomeownerCard eyebrow="Porches & decks" title="Built for the outdoors" body="New builds, rebuilds, and refinishing that bring tired wood back to life — ready for years of weekends outside." composed="assets/images/deck-before-after.jpg" /> },
+    { value: "r", label: "Roofs & gutters", content: <HomeownerCard eyebrow="Roofs & gutters" title="Protect what's underneath" body="Full roof replacements and gutter work that keep water out and protect everything below. Done right, done to last." composed="assets/images/roof-before-after.jpg" /> },
   ];
   return (
     <section className="section scheme-3" id="homeowners">
@@ -314,7 +313,19 @@ function Homeowners() {
   );
 }
 
-function HomeownerCard({ eyebrow, title, body, img }) {
+function HomeownerCard({ eyebrow, title, body, img, before, after, composed }) {
+  let media;
+  if (before && after) {
+    media = <BeforeAfter before={before} after={after} alt={title} />;
+  } else if (composed) {
+    media = (
+      <div className="aspect-square" style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "var(--color-neutral-darkest)" }}>
+        <img src={composed} alt={title} style={{ display: "block", width: "100%", height: "auto" }} />
+      </div>
+    );
+  } else {
+    media = <div className="aspect-square"><img className="cover" src={img} alt={title} /></div>;
+  }
   return (
     <SCard>
       <div className="grid cols-2 items-center" style={{ gap: 0 }}>
@@ -323,11 +334,10 @@ function HomeownerCard({ eyebrow, title, body, img }) {
           <h3 className="h3 mb-12" style={{ marginBottom: "1rem" }}>{title}</h3>
           <p className="body muted">{body}</p>
           <div className="btn-row mt-8">
-            <SButton variant="secondary">Schedule</SButton>
-            <SButton variant="link" iconRight={<SIcon name="chevronRight" size={18} />}>View work</SButton>
+            <SButton variant="secondary" onClick={() => { const el = document.getElementById("contact"); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 70, behavior: "smooth" }); }}>Schedule</SButton>
           </div>
         </div>
-        <div className="aspect-square"><img className="cover" src={img} alt={title} /></div>
+        {media}
       </div>
     </SCard>
   );
@@ -335,9 +345,9 @@ function HomeownerCard({ eyebrow, title, body, img }) {
 
 function AgingInPlace() {
   const tabs = [
-    { title: "Walk-in showers", body: "Curbless, slip-resistant showers designed for safe, independent bathing for years to come.", img: "aging-walk-in-shower.jpg" },
-    { title: "Grab bars & safety", body: "Discreet, sturdy support placed exactly where it's needed — bathrooms, hallways, and entries.", img: "aging-grab-bars.jpg" },
-    { title: "Ramps & doorways", body: "Wider doorways and gentle ramps that keep every room reachable, with dignity.", img: "aging-ramp.webp" },
+    { title: "Walk-in showers", body: "Curbless, slip-resistant showers designed for safe, independent bathing for years to come.", img: "assets/images/aging-walk-in-shower.jpg" },
+    { title: "Grab bars & safety", body: "Discreet, sturdy support placed exactly where it's needed — bathrooms, hallways, and entries.", img: "assets/images/aging-grab-bars.jpg" },
+    { title: "Ramps & doorways", body: "Wider doorways and gentle ramps that keep every room reachable, with dignity.", img: "assets/images/aging-ramp.webp" },
   ];
   return (
     <section className="section scheme-2" id="aging-in-place">
@@ -364,9 +374,9 @@ const { Icon: S3Icon } = window;
 const { useState: useS3 } = React;
 
 const REVIEWS = [
-  { quote: "They finished two weeks early and came in under budget. That never happens.", name: "David Chen", role: "Real estate investor", img: "home-testimonial-section-0.jpg" },
-  { quote: "Our kitchen is beautiful. More importantly, it works exactly how we imagined.", name: "Sarah Mitchell", role: "Homeowner, Clayton", img: "home-testimonial-section-1.jpg" },
-  { quote: "My mom can move through the house safely now. That's everything to us.", name: "Robert Walsh", role: "Family, aging in place", img: "home-testimonial-section-2.jpg" },
+  { quote: "They finished two weeks early and came in under budget. That never happens.", name: "David Chen", role: "Real estate investor", img: "assets/images/home-testimonial-section-0.jpg" },
+  { quote: "Our kitchen is beautiful. More importantly, it works exactly how we imagined.", name: "Sarah Mitchell", role: "Homeowner, Clayton", img: "assets/images/home-testimonial-section-1.jpg" },
+  { quote: "My mom can move through the house safely now. That's everything to us.", name: "Robert Walsh", role: "Family, aging in place", img: "assets/images/home-testimonial-section-2.jpg" },
   { quote: "Every question got a same-day answer. No chasing, no runaround — just a team that does what they say.", name: "Angela Foster", role: "Homeowner, Webster Groves" },
   { quote: "Three flips with Reclaim now. Predictable budgets, clean work, and they never blow the timeline.", name: "Marcus Reed", role: "Buy-and-hold investor" },
   { quote: "Curbless shower, grab bars, wider doorways. Dad feels safe and it still looks like home.", name: "Tom & Linda Pearce", role: "Aging in place" },
@@ -408,18 +418,20 @@ function Testimonials() {
   );
 }
 
-function VideoCard({ img, title, meta, duration }) {
+function VideoCard({ before, after, title, meta, onPlay }) {
   const [mode, setMode] = useS3("after");
+  const videoId = mode === "before" ? before : after;
   return (
-    <div className="rounded-img rc-video" style={{ position: "relative", overflow: "hidden", cursor: "pointer" }}>
+    <div className="rounded-img rc-video" onClick={() => onPlay(videoId, title + " \u2014 " + (mode === "before" ? "Before" : "After"))} style={{ position: "relative", overflow: "hidden", cursor: "pointer" }}>
       <img
         className="cover"
         style={{
-          width: "100%", aspectRatio: "16 / 11", display: "block",
+          width: "100%", aspectRatio: "16 / 11", display: "block", objectFit: "cover",
           filter: mode === "before" ? "grayscale(.55) brightness(.78) contrast(.97)" : "none",
           transition: "filter .45s ease",
         }}
-        src={img}
+        src={"https://i.ytimg.com/vi/" + videoId + "/maxresdefault.jpg"}
+        onError={(e) => { if (!e.currentTarget.dataset.fb) { e.currentTarget.dataset.fb = "1"; e.currentTarget.src = "https://i.ytimg.com/vi/" + videoId + "/hqdefault.jpg"; } }}
         alt={title}
       />
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,.18) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.62) 100%)", pointerEvents: "none" }}></div>
@@ -439,8 +451,6 @@ function VideoCard({ img, title, meta, duration }) {
         ))}
       </div>
 
-      <span style={{ position: "absolute", top: "1rem", right: "1rem", background: "rgba(17,28,41,.5)", backdropFilter: "blur(6px)", color: "#fff", fontSize: ".72rem", fontWeight: 600, padding: ".3rem .6rem", borderRadius: "6px" }}>{duration}</span>
-
       <div className="rc-play" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "4.25rem", height: "4.25rem", borderRadius: "999px", background: "rgba(255,255,255,.94)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 10px 34px rgba(0,0,0,.4)", transition: "transform .2s ease" }}>
         <span style={{ color: "var(--color-jelly-bean-darkest, #112c41)", fontSize: "1.55rem", marginLeft: "4px", display: "flex" }}><S3Icon name="play" /></span>
       </div>
@@ -453,14 +463,45 @@ function VideoCard({ img, title, meta, duration }) {
   );
 }
 
+function VideoLightbox({ video, onClose }) {
+  React.useEffect(() => {
+    if (!video) return;
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [video, onClose]);
+  if (!video) return null;
+  return (
+    <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(8,16,24,.88)", backdropFilter: "blur(5px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "2rem", gap: "1.1rem" }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: "min(1080px, 100%)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: ".9rem" }}>
+          <p className="body" style={{ color: "#fff", fontWeight: 600 }}>{video.label}</p>
+          <button onClick={onClose} aria-label="Close" style={{ border: "none", background: "rgba(255,255,255,.14)", color: "#fff", cursor: "pointer", width: "2.4rem", height: "2.4rem", borderRadius: "999px", fontSize: "1.2rem", lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>&times;</button>
+        </div>
+        <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 9", borderRadius: "14px", overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,.55)", background: "#000" }}>
+          <iframe
+            src={"https://www.youtube-nocookie.com/embed/" + video.id + "?autoplay=1&rel=0&playsinline=1&origin=" + encodeURIComponent(window.location.origin)}
+            title={video.label}
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
+            referrerPolicy="strict-origin-when-cross-origin"
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Gallery() {
+  const [video, setVideo] = useS3(null);
   const projects = [
-    { img: "home-gallery-section-0.jpg", title: "Tower Grove bungalow", meta: "Full gut rehab · BRRRR", duration: "1:24" },
-    { img: "home-gallery-section-1.jpg", title: "Soulard two-flat", meta: "Rental conversion", duration: "2:05" },
-    { img: "home-gallery-section-2.jpg", title: "Maplewood kitchen", meta: "Kitchen remodel", duration: "0:58" },
-    { img: "home-gallery-section-3.jpg", title: "Webster Groves bath", meta: "Bathroom remodel", duration: "1:47" },
-    { img: "home-feature-section-8.jpg", title: "Benton Park flip", meta: "Fix-and-flip", duration: "1:12" },
-    { img: "home-feature-section-6.jpg", title: "Kirkwood basement", meta: "Basement finish", duration: "2:31" },
+    { before: "ugJhHvTgNcI", after: "bk-TReBfO8o", title: "3316 Sidney", meta: "Full rehab · Before & after" },
+    { before: "rVhfRrlIMwc", after: "6QSygXUM5zc", title: "4315 Delmar", meta: "Full rehab · Before & after" },
+    { before: "HOjn-3-Td9M", after: "hpKoLT6NzHI", title: "3647 Pennsylvania Ave", meta: "Full rehab · Before & after" },
+    { before: "ZUMkN42oNcA", after: "N2AbRDgrERw", title: "4626 Ray", meta: "Full rehab · Before & after" },
+    { before: "W-mPFsP0pyM", after: "8WMwCXQsXMc", title: "2626 Lemp", meta: "Full rehab · Before & after" },
+    { before: "uHlq29GKpow", after: "ZMztfcEZdao", title: "3608 Nebraska", meta: "Full rehab · Before & after" },
   ];
   return (
     <section className="section scheme-2" id="projects">
@@ -470,9 +511,10 @@ function Gallery() {
           <p className="lede muted mt-6">Before-and-after videos from real St. Louis projects. Tap play to watch the transformation.</p>
         </div>
         <div className="rc-gallery" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem" }}>
-          {projects.map((p, i) => <VideoCard key={i} {...p} />)}
+          {projects.map((p, i) => <VideoCard key={i} {...p} onPlay={(id, label) => setVideo({ id, label })} />)}
         </div>
       </div>
+      <VideoLightbox video={video} onClose={() => setVideo(null)} />
     </section>
   );
 }
@@ -505,12 +547,12 @@ function Process() {
         <div className="grid cols-2">
           <ProcessCard big step="Step 01" title="Discovery call"
             body="We listen. You tell us about the project, your timeline, your budget, and what matters most. We ask good questions."
-            img="home-how-it-works-section-1.jpg" />
+            img="assets/images/discovery-call-couple.jpg" />
           <div className="grid cols-2">
-            <ProcessCard step="Step 02" title="Site visit" body="We walk the property. We measure. We map what's there." img="home-how-it-works-section-2.jpg" />
-            <ProcessCard step="Step 03" title="Scope & budget" body="Detailed proposal. Fixed price. You approve up front." img="home-how-it-works-section-3.jpg" />
-            <ProcessCard step="Step 04" title="Construction" body="We build it. Weekly updates. Same-day answers given." img="home-how-it-works-section-4.jpg" />
-            <ProcessCard step="Step 05" title="Walkthrough" body="We inspect together. You sign off. The work's done." img="home-how-it-works-section-0.jpg" />
+            <ProcessCard step="Step 02" title="Site visit" body="We walk the property. We measure. We map what's there." img="assets/images/site-visit-couple.jpg" />
+            <ProcessCard step="Step 03" title="Scope & budget" body="Detailed proposal. Fixed price. You approve up front." img="assets/images/scope-budget-review.jpg" />
+            <ProcessCard step="Step 04" title="Construction" body="We build it. Weekly updates. Same-day answers given." img="assets/images/construction-framing.jpg" />
+            <ProcessCard step="Step 05" title="Walkthrough" body="We inspect together. You sign off. The work's done." img="assets/images/walkthrough-inspect.jpg" />
           </div>
         </div>
       </div>
@@ -552,7 +594,7 @@ function About({ onContact }) {
               <S4Button onClick={onContact}>Get a free estimate</S4Button>
             </div>
           </div>
-          <div className="rounded-img"><img className="cover" src="home-about-section.jpg" alt="Jeff and Maria, founders of Reclaim Construction" /></div>
+          <div className="rounded-img"><img className="cover" src="assets/images/home-about-section.jpg" alt="Jeff and Maria, founders of Reclaim Construction" /></div>
         </div>
       </div>
     </section>
@@ -561,9 +603,9 @@ function About({ onContact }) {
 
 function ServiceArea() {
   const areas = [
-    { name: "St. Louis", desc: "St. Louis City and St. Louis County, Missouri", img: "home-locations-section-0.jpg" },
-    { name: "Clayton", desc: "Clayton, Missouri and the surrounding suburbs", img: "home-locations-section-1.jpg" },
-    { name: "Webster Groves", desc: "Webster Groves and surrounding communities", img: "home-locations-section-2.jpg" },
+    { name: "St. Louis", desc: "St. Louis City and St. Louis County, Missouri", img: "assets/images/home-locations-section-0.jpg" },
+    { name: "Clayton", desc: "Clayton, Missouri and the surrounding suburbs", img: "assets/images/home-locations-section-1.jpg" },
+    { name: "Webster Groves", desc: "Webster Groves and surrounding communities", img: "assets/images/home-locations-section-2.jpg" },
   ];
   const [active, setActive] = useS4(0);
   return (
@@ -610,7 +652,7 @@ function FinalCta({ onSchedule, onContact }) {
             <S4Button variant="secondary" onClick={onContact}>Contact us</S4Button>
           </div>
         </div>
-        <div className="rounded-img"><img className="cover" style={{ maxHeight: "32rem" }} src="home-cta-section.jpg" alt="A finished Reclaim project" /></div>
+        <div className="rounded-img"><img className="cover" style={{ maxHeight: "32rem" }} src="assets/images/home-cta-section.jpg" alt="A finished Reclaim project" /></div>
       </div>
     </section>
   );
@@ -654,7 +696,7 @@ const ContactForm = fwdRef(function ContactForm(_props, ref) {
           </div>
         </div>
         <div className="rounded-img" style={{ marginBottom: "3rem" }}>
-          <img className="cover" style={{ maxHeight: "32rem" }} src="home-cta-section.jpg" alt="A Reclaim consultation" />
+          <img className="cover" style={{ maxHeight: "32rem" }} src="assets/images/contact-couple-home.jpg" alt="A happy couple in front of their renovated St. Louis home" />
         </div>
         {sent ? (
           <div ref={formRef} className="scheme-2 rc-contact-panel" style={{ textAlign: "center" }}>
